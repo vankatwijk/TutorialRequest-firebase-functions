@@ -23,3 +23,9 @@ exports.tohpvk = functions.https.onRequest((request,response) =>{
 
     response.redirect('https://hpvk.com');
 })
+
+//http callable function
+exports.sayHello = functions.https.onCall((data,context) =>{
+
+    return `hello, ninjas`
+})
