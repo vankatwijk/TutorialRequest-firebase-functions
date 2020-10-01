@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
-
+const admin = require('firebase-admin');
+admin.initializeApp();
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -31,12 +32,18 @@ const functions = require('firebase-functions');
 //     return `hello, $(name)`;
 // })
 
-//auth trigger
+//auth trigger (new user signup)
 exports.newUserSignup = functions.auth.user().onCreate(user => {
     console.log('user created', user.email,user.uid);
+    return admin.firestore().collection('users').doc(user.uid).set({
+        email: user.email,
+        upvotedOn:[]
+    })
 })
 
 //auth trigger (user deleted)
 exports.userDeleted = functions.auth.user().onDelete(user => {
-    console.log('user deleted', user.email,user.uid);
+    //console.log('user deleted', user.email,user.uid);
+    const doc = admin.firestore().collection('users').doc(user.uid);
+    doc.delete();
 })
