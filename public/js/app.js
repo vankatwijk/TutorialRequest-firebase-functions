@@ -32,4 +32,12 @@ requestForm.addEventListener('submit', (e) => {
    addRequest({
        text:requestForm.request.value,
    })
+   .then(() => {
+        requestForm.reset();
+        requestModal.classList.remove('open');
+        requestForm.querySelector('.error').textContent = '';
+   })
+   .catch(error => {
+       requestForm.querySelector('.error').textContent = error.message;
+   })
 });
