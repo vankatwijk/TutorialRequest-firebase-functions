@@ -1,5 +1,6 @@
 const requestModal = document.querySelector('.new-request');
 const requestLink = document.querySelector('.add-request');
+const requestForm = documetn.querySelector('.new-request form');
 
 // open request modal
 requestLink.addEventListener('click', () => {
@@ -23,3 +24,12 @@ button.addEventListener('click',()=>{
         console.log(result.data);
     });
 })
+
+//add a new request
+requestForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+   const addRequest = firebase.functions().httpsCallable('addRequest');
+   addRequest({
+       text:requestForm.request.value,
+   })
+});
