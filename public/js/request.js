@@ -1,5 +1,5 @@
-const ref = firebase.firestore().collection('requests');
+// const ref = firebase.firestore().collection('requests');
 
-ref.onSnapshot(snapshot => {
-    
-})
+// ref.onSnapshot(snapshot => {
+//     console.log(snapshot)
+// })

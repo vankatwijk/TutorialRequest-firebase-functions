@@ -65,6 +65,7 @@ exports.addRequest = functions.https.onCall((data, context) => {
         )
     }
 
+    console.log('[before execution]')
     return admin.firestore().collection('requests').add({
         text:data.text,
         upvotes:0,

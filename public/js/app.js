@@ -1,6 +1,6 @@
 const requestModal = document.querySelector('.new-request');
 const requestLink = document.querySelector('.add-request');
-const requestForm = documetn.querySelector('.new-request form');
+const requestForm = document.querySelector('.new-request form');
 
 // open request modal
 requestLink.addEventListener('click', () => {
@@ -29,15 +29,21 @@ button.addEventListener('click',()=>{
 requestForm.addEventListener('submit', (e) => {
     e.preventDefault();
    const addRequest = firebase.functions().httpsCallable('addRequest');
+
+    console.log(requestForm.request.value);
+
    addRequest({
-       text:requestForm.request.value,
-   })
-   .then(() => {
-        requestForm.reset();
-        requestModal.classList.remove('open');
-        requestForm.querySelector('.error').textContent = '';
-   })
-   .catch(error => {
-       requestForm.querySelector('.error').textContent = error.message;
-   })
+       text:requestForm.request.value
+   }).then(result =>{
+    console.log(result.data);
+});
+//    .then(() => {
+//         requestForm.reset();
+//         requestModal.classList.remove('open');
+//         requestForm.querySelector('.error').textContent = '';
+//    })
+//    .catch(error => {
+//        console.log(error)
+//        requestForm.querySelector('.error').textContent = error.message;
+//    })
 });
