@@ -2,3 +2,5 @@ npm install -g firebase-tools
 firebase login
 firebase init
 firebase serve
+
+firebase deploy --only functions:makeUppercase
