@@ -26,24 +26,22 @@ button.addEventListener('click',()=>{
 })
 
 //add a new request
+//this function works but produces a 500 error due to node 8 upgrade to node 12
 requestForm.addEventListener('submit', (e) => {
     e.preventDefault();
-   const addRequest = firebase.functions().httpsCallable('addRequest');
+    const addRequest = firebase.functions().httpsCallable('addRequest');
 
     console.log(requestForm.request.value);
 
    addRequest({
        text:requestForm.request.value
-   }).then(result =>{
-    console.log(result.data);
-});
-//    .then(() => {
-//         requestForm.reset();
-//         requestModal.classList.remove('open');
-//         requestForm.querySelector('.error').textContent = '';
-//    })
-//    .catch(error => {
-//        console.log(error)
-//        requestForm.querySelector('.error').textContent = error.message;
-//    })
+   }).then(() => {
+        requestForm.reset();
+        requestModal.classList.remove('open');
+        requestForm.querySelector('.error').textContent = '';
+   })
+   .catch(error => {
+       console.log(error)
+       requestForm.querySelector('.error').textContent = error.message;
+   })
 });
