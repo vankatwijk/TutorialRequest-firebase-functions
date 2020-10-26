@@ -10,6 +10,7 @@ var app = new Vue({
             upvote({ id })
             .catch(error => {
                 console.log(error.message)
+                showNotification(error.message)
             })
 
         }
