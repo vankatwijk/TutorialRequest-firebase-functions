@@ -69,47 +69,38 @@ exports.addRequest = functions.https.onCall((data, context) => {
     });
   });
 
+// upvote callable function
+exports.upvote = functions.https.onCall((data, context) => {
+  // check auth state
+  if (!context.auth) {
+    throw new functions.https.HttpsError(
+      'unauthenticated', 
+      'only authenticated users can vote up requests'
+    );
+  }
+  // get refs for user doc & request doc
+  const user = admin.firestore().collection('users').doc(context.auth.uid);
+  const request = admin.firestore().collection('requests').doc(data.id);
 
-  //upvote callable function
-
-  exports.upvote = functions.https.onCall((data, context) => {
-
-    // check the auth state
-    if (!context.auth) {
+  return user.get().then(doc => {
+    // check thew user hasn't already upvoted
+    if(doc.data().upvotedOn.includes(data.id)){
       throw new functions.https.HttpsError(
-        'unauthenticated', 
-        'only authenticated users can add requests'
+        'failed-precondition', 
+        'You can only vote something up once'
       );
     }
 
-    //get refs for user doc and request doc
-    const user = admin.firestore().collection('user').doc(context.auth.uid)
-    const request = admin.firestore().collection('requests').doc(data.id)
-
-
-    return user.get().then(doc => {
-      //user hasn't upvoted already request
-      if(doc.data().upvotedOn.includes(data.id)){
-
-        throw new functions.https.HttpsError(
-          'failed-precondition', 
-          'only vote once'
-        );
-
-      }
-
-      // update user array
-      //was not upvoted before
-      return user.update({
-        upvotedOn:[...doc.data().upvotedOn, data.id]
-      })
-      .then(() => {
-        return request.update({
-          upvotes: admin.firestore.FieldValue.increment(1)
-        });
-      })
-
+    // update the array in user document
+    return user.update({
+      upvotedOn: [...doc.data().upvotedOn, data.id]
     })
+    .then(() => {
+      // update the votes on the request
+      return request.update({
+        upvotes: admin.firestore.FieldValue.increment(1)
+      });
+    });
 
-
-  })
+  });
+});

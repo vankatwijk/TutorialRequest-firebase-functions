@@ -59,8 +59,8 @@
         <li v-for="request in requests">
           <span class="text">{{ request.text}}</span>
           <div>
-            <span class="votes">{{ requests.upvotes }}</span>
-            <i class="material-icons upvote">arrow_upward</i>
+            <span class="votes">{{ request.upvotes }}</span>
+            <i class="material-icons upvote" v-on:click="upvotedRequest(request.id)">arrow_upward</i>
           </div>
         </li>
       </ul>
